@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>에러 발생 테스트</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #222;
+        color: white;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        margin-top: 50px;
+      }
+
+      .error-button {
+        padding: 15px 30px;
+        font-size: 18px;
+        border: none;
+        background-color: #ff4757;
+        color: white;
+        cursor: pointer;
+        border-radius: 5px;
+        margin-top: 20px;
+      }
+
+      .error-button:hover {
+        background-color: #e8413a;
+      }
+    </style>
+
+    <script>
+      function triggerError() {
+        try {
+          throw new Error(
+            '🔥 강제 에러 발생! 이 에러가 RUM에서 트래킹되는지 확인하세요.'
+          );
+        } catch (error) {
+          console.error('에러 발생:', error);
+          alert('에러가 발생했습니다! 모니터링 시스템을 확인하세요.');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <nav>
+      <ul
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          list-style: none;
+          padding: 20px 0;
+          background: #333;
+        "
+      >
+        <li>
+          <a href="index.html" style="color: white; text-decoration: none"
+            >홈</a
+          >
+        </li>
+        <li>
+          <a href="runaway.html" style="color: white; text-decoration: none"
+            >도망가는 버튼</a
+          >
+        </li>
+        <li>
+          <a href="flip.html" style="color: white; text-decoration: none"
+            >카드 플립</a
+          >
+        </li>
+        <li>
+          <a href="wave.html" style="color: white; text-decoration: none"
+            >파도 버튼</a
+          >
+        </li>
+        <li>
+          <a href="neon.html" style="color: white; text-decoration: none"
+            >네온 글자</a
+          >
+        </li>
+        <li>
+          <a href="api.html" style="color: white; text-decoration: none"
+            >API 예제</a
+          >
+        </li>
+        <li>
+          <a href="error.html" style="color: white; text-decoration: none"
+            >에러 테스트</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>에러 발생 테스트</h1>
+      <p>아래 버튼을 클릭하면 강제 에러가 발생합니다. 🚨</p>
+      <button class="error-button" onclick="triggerError()">에러 발생</button>
+    </div>
+  </body>
+</html>
