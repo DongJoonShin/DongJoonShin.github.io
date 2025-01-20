@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>이벤트 테스트</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #222;
+        color: white;
+        margin: 0;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+      }
+
+      .event-section {
+        background: #333;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 30px;
+      }
+
+      .event-log {
+        background: #1a1a1a;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 10px;
+        max-height: 100px;
+        overflow-y: auto;
+        font-family: monospace;
+      }
+
+      .event-log p {
+        margin: 5px 0;
+        font-size: 14px;
+      }
+
+      .input-group {
+        margin: 15px 0;
+      }
+
+      input[type='text'],
+      textarea {
+        background: #444;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        color: white;
+        width: 100%;
+        margin-top: 5px;
+      }
+
+      button {
+        background: #2ecc71;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        margin: 5px;
+        transition: opacity 0.3s;
+      }
+
+      button:hover {
+        opacity: 0.8;
+      }
+
+      .hover-box {
+        background: #444;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        margin: 10px 0;
+        transition: background-color 0.3s;
+      }
+
+      .hover-box:hover {
+        background: #555;
+      }
+
+      .scroll-box {
+        height: 150px;
+        overflow-y: scroll;
+        background: #444;
+        padding: 20px;
+        border-radius: 5px;
+        margin: 10px 0;
+      }
+
+      .drag-drop-box {
+        border: 2px dashed #666;
+        padding: 20px;
+        border-radius: 5px;
+        text-align: center;
+        margin: 10px 0;
+      }
+
+      .drag-drop-box.dragover {
+        border-color: #2ecc71;
+        background: #2ecc7133;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="tracking.js"></script>
+    <nav>
+      <ul
+        style="
+          display: flex;
+          justify-content: center;
+          gap: 20px;
+          list-style: none;
+          padding: 20px 0;
+          background: #333;
+        "
+      >
+        <li>
+          <a href="index.html" style="color: white; text-decoration: none"
+            >홈</a
+          >
+        </li>
+        <li>
+          <a href="runaway.html" style="color: white; text-decoration: none"
+            >도망가기 효과</a
+          >
+        </li>
+        <li>
+          <a href="flip.html" style="color: white; text-decoration: none"
+            >카드 뒤집기 효과</a
+          >
+        </li>
+        <li>
+          <a href="wave.html" style="color: white; text-decoration: none"
+            >파도 효과</a
+          >
+        </li>
+        <li>
+          <a href="neon.html" style="color: white; text-decoration: none"
+            >네온 효과</a
+          >
+        </li>
+        <li>
+          <a href="api.html" style="color: white; text-decoration: none"
+            >API 테스트</a
+          >
+        </li>
+        <li>
+          <a href="error.html" style="color: white; text-decoration: none"
+            >에러 테스트</a
+          >
+        </li>
+        <li>
+          <a href="event.html" style="color: white; text-decoration: none"
+            >이벤트 테스트</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>브라우저 이벤트 테스트</h1>
+      <p>다양한 브라우저 이벤트를 테스트해보세요! 🎮</p>
+
+      <!-- 마우스 이벤트 섹션 -->
+      <div class="event-section">
+        <h2>마우스 이벤트</h2>
+        <div class="hover-box" id="mouseEventBox">
+          이 영역에 마우스를 올려보세요!
+        </div>
+        <div class="event-log" id="mouseEventLog"></div>
+      </div>
+
+      <!-- 키보드 이벤트 섹션 -->
+      <div class="event-section">
+        <h2>키보드 이벤트</h2>
+        <div class="input-group">
+          <input
+            type="text"
+            id="keyboardInput"
+            placeholder="여기에 타이핑해보세요..."
+          />
+        </div>
+        <div class="event-log" id="keyboardEventLog"></div>
+      </div>
+
+      <!-- 스크롤 이벤트 섹션 -->
+      <div class="event-section">
+        <h2>스크롤 이벤트</h2>
+        <div class="scroll-box" id="scrollBox">
+          <p>스크롤해보세요!</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>.</p>
+          <p>끝!</p>
+        </div>
+        <div class="event-log" id="scrollEventLog"></div>
+      </div>
+
+      <!-- 폼 이벤트 섹션 -->
+      <div class="event-section">
+        <h2>폼 이벤트</h2>
+        <form id="testForm">
+          <div class="input-group">
+            <input
+              type="text"
+              id="formInput"
+              placeholder="포커스/블러 테스트..."
+            />
+          </div>
+          <button type="submit">제출</button>
+          <button type="reset">초기화</button>
+        </form>
+        <div class="event-log" id="formEventLog"></div>
+      </div>
+
+      <!-- 드래그 앤 드롭 이벤트 섹션 -->
+      <div class="event-section">
+        <h2>드래그 앤 드롭</h2>
+        <div class="drag-drop-box" id="dropZone">
+          파일을 여기에 드래그 앤 드롭하세요
+        </div>
+        <div class="event-log" id="dragDropEventLog"></div>
+      </div>
+    </div>
+
+    <script>
+      // 이벤트 로그 출력 함수
+      function logEvent(logElement, message) {
+        const p = document.createElement('p');
+        p.textContent = `${new Date().toLocaleTimeString()}: ${message}`;
+        logElement.insertBefore(p, logElement.firstChild);
+        if (logElement.children.length > 5) {
+          logElement.removeChild(logElement.lastChild);
+        }
+      }
+
+      // 마우스 이벤트
+      const mouseEventBox = document.getElementById('mouseEventBox');
+      const mouseEventLog = document.getElementById('mouseEventLog');
+
+      ['mouseenter', 'mouseleave', 'mousemove', 'click', 'dblclick'].forEach(
+        (eventType) => {
+          mouseEventBox.addEventListener(eventType, (e) => {
+            logEvent(
+              mouseEventLog,
+              `${eventType} 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`
+            );
+          });
+        }
+      );
+
+      // 키보드 이벤트
+      const keyboardInput = document.getElementById('keyboardInput');
+      const keyboardEventLog = document.getElementById('keyboardEventLog');
+
+      ['keydown', 'keyup', 'keypress'].forEach((eventType) => {
+        keyboardInput.addEventListener(eventType, (e) => {
+          logEvent(
+            keyboardEventLog,
+            `${eventType}: ${e.key} (keyCode: ${e.keyCode})`
+          );
+        });
+      });
+
+      // 스크롤 이벤트
+      const scrollBox = document.getElementById('scrollBox');
+      const scrollEventLog = document.getElementById('scrollEventLog');
+
+      scrollBox.addEventListener('scroll', (e) => {
+        logEvent(scrollEventLog, `스크롤 위치: ${scrollBox.scrollTop}px`);
+      });
+
+      // 폼 이벤트
+      const testForm = document.getElementById('testForm');
+      const formInput = document.getElementById('formInput');
+      const formEventLog = document.getElementById('formEventLog');
+
+      ['focus', 'blur', 'change'].forEach((eventType) => {
+        formInput.addEventListener(eventType, () => {
+          logEvent(formEventLog, `${eventType} 이벤트 발생`);
+        });
+      });
+
+      testForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        logEvent(formEventLog, '폼 제출됨');
+      });
+
+      testForm.addEventListener('reset', () => {
+        logEvent(formEventLog, '폼 초기화됨');
+      });
+
+      // 드래그 앤 드롭 이벤트
+      const dropZone = document.getElementById('dropZone');
+      const dragDropEventLog = document.getElementById('dragDropEventLog');
+
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach((eventType) => {
+        dropZone.addEventListener(eventType, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (eventType === 'dragenter' || eventType === 'dragover') {
+            dropZone.classList.add('dragover');
+          } else {
+            dropZone.classList.remove('dragover');
+          }
+
+          if (eventType === 'drop') {
+            const files = e.dataTransfer.files;
+            logEvent(dragDropEventLog, `파일 드롭됨: ${files.length}개 파일`);
+          } else {
+            logEvent(dragDropEventLog, `${eventType} 이벤트 발생`);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
