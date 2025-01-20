@@ -1,1 +1,58 @@
-Hello World
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도망가는 버튼</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .container {
+            position: relative;
+            width: 300px;
+            height: 200px;
+        }
+
+        .runaway-button {
+            position: absolute;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            background-color: #ff4757;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: transform 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <button class="runaway-button">눌러봐!</button>
+    </div>
+
+    <script>
+        const button = document.querySelector('.runaway-button');
+        const container = document.querySelector('.container');
+
+        button.addEventListener('mouseover', () => {
+            const containerRect = container.getBoundingClientRect();
+            const buttonRect = button.getBoundingClientRect();
+
+            let newX = Math.random() * (containerRect.width - buttonRect.width);
+            let newY = Math.random() * (containerRect.height - buttonRect.height);
+
+            button.style.transform = `translate(${newX}px, ${newY}px)`;
+        });
+    </script>
+
+</body>
+</html>
