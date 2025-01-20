@@ -260,10 +260,17 @@
       ['mouseenter', 'mouseleave', 'mousemove', 'click', 'dblclick'].forEach(
         (eventType) => {
           mouseEventBox.addEventListener(eventType, (e) => {
-            logEvent(
-              mouseEventLog,
-              `${eventType} 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`
-            );
+            const message = `${eventType} 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`;
+            logEvent(mouseEventLog, message);
+
+            // RequestMetrics 커스텀 이벤트 전송 (click은 자동 트래킹되므로 제외)
+            if (eventType !== 'click') {
+              RM.sendEvent(`mouse_${eventType}`, {
+                element_id: 'mouseEventBox',
+                position_x: String(e.offsetX),
+                position_y: String(e.offsetY),
+              });
+            }
           });
         }
       );
@@ -274,10 +281,17 @@
 
       ['keydown', 'keyup', 'keypress'].forEach((eventType) => {
         keyboardInput.addEventListener(eventType, (e) => {
-          logEvent(
-            keyboardEventLog,
-            `${eventType}: ${e.key} (keyCode: ${e.keyCode})`
-          );
+          const message = `${eventType}: ${e.key} (keyCode: ${e.keyCode})`;
+          logEvent(keyboardEventLog, message);
+
+          // RequestMetrics 커스텀 이벤트 전송 (input은 자동 트래킹되므로 제외)
+          if (eventType !== 'input') {
+            RM.sendEvent(`keyboard_${eventType}`, {
+              element_id: 'keyboardInput',
+              key: e.key,
+              key_code: String(e.keyCode),
+            });
+          }
         });
       });
 
@@ -285,8 +299,19 @@
       const scrollBox = document.getElementById('scrollBox');
       const scrollEventLog = document.getElementById('scrollEventLog');
 
+      let isFirstScroll = true;
       scrollBox.addEventListener('scroll', (e) => {
-        logEvent(scrollEventLog, `스크롤 위치: ${scrollBox.scrollTop}px`);
+        const message = `스크롤 위치: ${scrollBox.scrollTop}px`;
+        logEvent(scrollEventLog, message);
+
+        // RequestMetrics 커스텀 이벤트 전송 (첫 스크롤은 자동 트래킹되므로 제외)
+        if (!isFirstScroll) {
+          RM.sendEvent('custom_scroll', {
+            element_id: 'scrollBox',
+            scroll_position: String(scrollBox.scrollTop),
+          });
+        }
+        isFirstScroll = false;
       });
 
       // 폼 이벤트
@@ -296,17 +321,34 @@
 
       ['focus', 'blur', 'change'].forEach((eventType) => {
         formInput.addEventListener(eventType, () => {
-          logEvent(formEventLog, `${eventType} 이벤트 발생`);
+          const message = `${eventType} 이벤트 발생`;
+          logEvent(formEventLog, message);
+
+          // RequestMetrics 커스텀 이벤트 전송
+          RM.sendEvent(`form_${eventType}`, {
+            element_id: 'formInput',
+            event_type: eventType,
+          });
         });
       });
 
       testForm.addEventListener('submit', (e) => {
         e.preventDefault();
         logEvent(formEventLog, '폼 제출됨');
+
+        // RequestMetrics 커스텀 이벤트 전송
+        RM.sendEvent('form_submit', {
+          form_id: 'testForm',
+        });
       });
 
       testForm.addEventListener('reset', () => {
         logEvent(formEventLog, '폼 초기화됨');
+
+        // RequestMetrics 커스텀 이벤트 전송
+        RM.sendEvent('form_reset', {
+          form_id: 'testForm',
+        });
       });
 
       // 드래그 앤 드롭 이벤트
@@ -326,9 +368,21 @@
 
           if (eventType === 'drop') {
             const files = e.dataTransfer.files;
-            logEvent(dragDropEventLog, `파일 드롭됨: ${files.length}개 파일`);
+            const message = `파일 드롭됨: ${files.length}개 파일`;
+            logEvent(dragDropEventLog, message);
+
+            // RequestMetrics 커스텀 이벤트 전송
+            RM.sendEvent('file_drop', {
+              element_id: 'dropZone',
+              file_count: String(files.length),
+            });
           } else {
             logEvent(dragDropEventLog, `${eventType} 이벤트 발생`);
+
+            // RequestMetrics 커스텀 이벤트 전송
+            RM.sendEvent(`drag_${eventType}`, {
+              element_id: 'dropZone',
+            });
           }
         });
       });
