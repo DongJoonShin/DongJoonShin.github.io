@@ -127,6 +127,146 @@
         </li>
       </ul>
     </nav>
-    // ... remaining body content ...
+    <div class="container">
+      <div class="button-group">
+        <button
+          class="test-button success-button"
+          onclick="testStatusCode(200)"
+        >
+          200 OK - 성공
+        </button>
+        <button
+          class="test-button success-button"
+          onclick="testStatusCode(201)"
+        >
+          201 Created - 리소스 생성 성공
+        </button>
+        <button
+          class="test-button warning-button"
+          onclick="testStatusCode(400)"
+        >
+          400 Bad Request - 잘못된 요청
+        </button>
+        <button
+          class="test-button warning-button"
+          onclick="testStatusCode(404)"
+        >
+          404 Not Found - 리소스를 찾을 수 없음
+        </button>
+        <button class="test-button error-button" onclick="testStatusCode(500)">
+          500 Internal Server Error - 서버 오류
+        </button>
+        <button class="test-button error-button" onclick="testStatusCode(503)">
+          503 Service Unavailable - 서비스 이용 불가
+        </button>
+        <hr style="border: 1px solid #444; width: 100%; margin: 20px 0" />
+        <button class="test-button error-button" onclick="triggerCustomError()">
+          커스텀 에러 발생시키기
+        </button>
+        <button
+          class="test-button error-button"
+          onclick="triggerPromiseError()"
+        >
+          비동기 에러 발생시키기
+        </button>
+        <button class="test-button error-button" onclick="triggerTypeError()">
+          타입 에러 발생시키기
+        </button>
+      </div>
+      <div id="result" class="result">
+        <h2 id="resultTitle"></h2>
+        <p id="resultMessage"></p>
+      </div>
+    </div>
+    <script>
+      async function testStatusCode(code) {
+        const resultDiv = document.getElementById('result');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+
+        try {
+          // httpstat.us 서비스를 사용하여 특정 상태 코드 테스트
+          const response = await fetch(`https://httpstat.us/${code}`);
+
+          // 응답 상태 표시
+          resultDiv.style.display = 'block';
+          resultTitle.textContent = `Status: ${response.status} ${response.statusText}`;
+
+          // 상태 코드에 따른 메시지와 스타일 설정
+          if (response.status >= 500) {
+            resultDiv.className = 'result error';
+            resultMessage.textContent = '서버에서 오류가 발생했습니다! 🔥';
+          } else if (response.status >= 400) {
+            resultDiv.className = 'result warning';
+            resultMessage.textContent = '클라이언트 요청에 문제가 있습니다! ⚠️';
+          } else {
+            resultDiv.className = 'result success';
+            resultMessage.textContent = '요청이 성공적으로 처리되었습니다! ✨';
+          }
+        } catch (error) {
+          resultDiv.style.display = 'block';
+          resultDiv.className = 'result error';
+          resultTitle.textContent = 'Error';
+          resultMessage.textContent = `네트워크 오류가 발생했습니다: ${error.message}`;
+        }
+      }
+
+      // 커스텀 에러 발생 함수
+      function triggerCustomError() {
+        const resultDiv = document.getElementById('result');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+
+        try {
+          throw new Error('이것은 커스텀 에러입니다! 🎯');
+        } catch (error) {
+          resultDiv.style.display = 'block';
+          resultDiv.className = 'result error';
+          resultTitle.textContent = 'Custom Error';
+          resultMessage.textContent = error.message;
+          console.error('커스텀 에러:', error);
+        }
+      }
+
+      // 비동기 에러 발생 함수
+      async function triggerPromiseError() {
+        const resultDiv = document.getElementById('result');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+
+        try {
+          await new Promise((_, reject) => {
+            setTimeout(() => {
+              reject(new Error('비동기 작업 중 에러가 발생했습니다! ⏰'));
+            }, 1000);
+          });
+        } catch (error) {
+          resultDiv.style.display = 'block';
+          resultDiv.className = 'result error';
+          resultTitle.textContent = 'Promise Error';
+          resultMessage.textContent = error.message;
+          console.error('프로미스 에러:', error);
+        }
+      }
+
+      // 타입 에러 발생 함수
+      function triggerTypeError() {
+        const resultDiv = document.getElementById('result');
+        const resultTitle = document.getElementById('resultTitle');
+        const resultMessage = document.getElementById('resultMessage');
+
+        try {
+          const nullObject = null;
+          nullObject.someMethod(); // null에서 메소드를 호출하여 TypeError 발생
+        } catch (error) {
+          resultDiv.style.display = 'block';
+          resultDiv.className = 'result error';
+          resultTitle.textContent = 'Type Error';
+          resultMessage.textContent =
+            '타입 에러가 발생했습니다! null 객체의 메소드를 호출할 수 없습니다. 🚫';
+          console.error('타입 에러:', error);
+        }
+      }
+    </script>
   </body>
 </html>
