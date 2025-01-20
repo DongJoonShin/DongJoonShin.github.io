@@ -243,6 +243,19 @@
     </div>
 
     <script>
+      // 디바운스 함수 추가
+      function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+
       // 이벤트 로그 출력 함수
       function logEvent(logElement, message) {
         const p = document.createElement('p');
@@ -257,23 +270,37 @@
       const mouseEventBox = document.getElementById('mouseEventBox');
       const mouseEventLog = document.getElementById('mouseEventLog');
 
-      ['mouseenter', 'mouseleave', 'mousemove', 'click', 'dblclick'].forEach(
-        (eventType) => {
-          mouseEventBox.addEventListener(eventType, (e) => {
-            const message = `${eventType} 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`;
-            logEvent(mouseEventLog, message);
+      // mousemove 이벤트 핸들러를 별도로 정의
+      const handleMouseMove = debounce((e) => {
+        const message = `mousemove 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`;
+        logEvent(mouseEventLog, message);
 
-            // RequestMetrics 커스텀 이벤트 전송 (click은 자동 트래킹되므로 제외)
-            if (eventType !== 'click') {
-              RM.sendEvent(`mouse_${eventType}`, {
-                element_id: 'mouseEventBox',
-                position_x: String(e.offsetX),
-                position_y: String(e.offsetY),
-              });
-            }
-          });
-        }
-      );
+        RM.sendEvent('mouse_mousemove', {
+          element_id: 'mouseEventBox',
+          position_x: String(e.offsetX),
+          position_y: String(e.offsetY),
+        });
+      }, 300); // 300ms 디바운스
+
+      // 이벤트 리스너 등록
+      ['mouseenter', 'mouseleave', 'click', 'dblclick'].forEach((eventType) => {
+        mouseEventBox.addEventListener(eventType, (e) => {
+          const message = `${eventType} 이벤트 발생 (x: ${e.offsetX}, y: ${e.offsetY})`;
+          logEvent(mouseEventLog, message);
+
+          // RequestMetrics 커스텀 이벤트 전송 (click은 자동 트래킹되므로 제외)
+          if (eventType !== 'click') {
+            RM.sendEvent(`mouse_${eventType}`, {
+              element_id: 'mouseEventBox',
+              position_x: String(e.offsetX),
+              position_y: String(e.offsetY),
+            });
+          }
+        });
+      });
+
+      // mousemove 이벤트는 별도로 등록
+      mouseEventBox.addEventListener('mousemove', handleMouseMove);
 
       // 키보드 이벤트
       const keyboardInput = document.getElementById('keyboardInput');

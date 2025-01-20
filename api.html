@@ -136,10 +136,46 @@
           ).textContent = `📍 ${user.location.city}, ${user.location.country}`;
 
           document.getElementById('userCard').style.display = 'block';
+
+          RM.identify(user.login.uuid, {
+            name: `${user.name.first} ${user.name.last}`,
+            email: user.email,
+          });
+
+          RM.addMetadata({
+            user_gender: user.gender,
+            user_age: String(user.dob.age),
+            user_nationality: user.nat,
+            user_location_city: user.location.city,
+            user_location_country: user.location.country,
+            user_phone: user.phone,
+            registration_date: user.registered.date,
+            last_fetch_time: new Date().toISOString(),
+          });
+
+          RM.sendEvent('random_user_fetched', {
+            user_id: user.login.uuid,
+            fetch_status: 'success',
+            user_age_group: getUserAgeGroup(user.dob.age),
+          });
         } catch (error) {
           console.error('API 요청 중 오류 발생:', error);
           alert('유저 정보를 불러오는 데 실패했습니다.');
+
+          RM.sendEvent('random_user_fetch_failed', {
+            error_message: error.message,
+            fetch_status: 'failed',
+          });
         }
+      }
+
+      function getUserAgeGroup(age) {
+        if (age < 20) return '10대';
+        if (age < 30) return '20대';
+        if (age < 40) return '30대';
+        if (age < 50) return '40대';
+        if (age < 60) return '50대';
+        return '60대 이상';
       }
     </script>
   </body>
