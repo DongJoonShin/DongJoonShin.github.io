@@ -1,64 +1,70 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>도망가는 버튼</title>
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f0f0f0;
-            font-family: 'Arial', sans-serif;
-        }
-
-        .container {
-            position: relative;
-            width: 300px;
-            height: 200px;
-        }
-
-        .runaway-button {
-            position: absolute;
-            padding: 15px 30px;
-            font-size: 18px;
-            border: none;
-            background-color: #ff4757;
-            color: white;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: transform 0.2s ease-in-out;
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <button class="runaway-button">눌러봐!</button>
-    </div>
-<!-- Request Metrics -->
-<script>
-    (function(t,e,n,r){function a(){return e&&e.now?e.now():null}if(!n.version){n._events=[];n._errors=[];n._metadata={};n._urlGroup=null;window.RM=n;n.install=function(e){n._options=e;var a=t.createElement("script");a.async=true;a.crossOrigin="anonymous";a.src=r;var o=t.getElementsByTagName("script")[0];o.parentNode.insertBefore(a,o)};n.identify=function(t,e){n._userId=t;n._identifyOptions=e};n.sendEvent=function(t,e){n._events.push({eventName:t,metadata:e,time:a()})};n.setUrlGroup=function(t){n._urlGroup=t};n.track=function(t,e){n._errors.push({error:t,metadata:e,time:a()})};n.addMetadata=function(t){n._metadata=Object.assign(n._metadata,t)}}})(document,window.performance,window.RM||{},"https://cdn.requestmetrics.com/agent/current/rm.js");
-    RM.install({ 
-        token: "f5re5ga:e4xy3zq"
-    });
-</script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>재미있는 CSS 인터랙션</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <script>
-        const button = document.querySelector('.runaway-button');
-        const container = document.querySelector('.container');
-
-        button.addEventListener('mouseover', () => {
-            const containerRect = container.getBoundingClientRect();
-            const buttonRect = button.getBoundingClientRect();
-
-            let newX = Math.random() * (containerRect.width - buttonRect.width);
-            let newY = Math.random() * (containerRect.height - buttonRect.height);
-
-            button.style.transform = `translate(${newX}px, ${newY}px)`;
-        });
+      (function (t, e, n, r) {
+        function a() {
+          return e && e.now ? e.now() : null;
+        }
+        if (!n.version) {
+          n._events = [];
+          n._errors = [];
+          n._metadata = {};
+          n._urlGroup = null;
+          window.RM = n;
+          n.install = function (e) {
+            n._options = e;
+            var a = t.createElement('script');
+            a.async = true;
+            a.crossOrigin = 'anonymous';
+            a.src = r;
+            var o = t.getElementsByTagName('script')[0];
+            o.parentNode.insertBefore(a, o);
+          };
+          n.identify = function (t, e) {
+            n._userId = t;
+            n._identifyOptions = e;
+          };
+          n.sendEvent = function (t, e) {
+            n._events.push({ eventName: t, metadata: e, time: a() });
+          };
+          n.setUrlGroup = function (t) {
+            n._urlGroup = t;
+          };
+          n.track = function (t, e) {
+            n._errors.push({ error: t, metadata: e, time: a() });
+          };
+          n.addMetadata = function (t) {
+            n._metadata = Object.assign(n._metadata, t);
+          };
+        }
+      })(
+        document,
+        window.performance,
+        window.RM || {},
+        'https://cdn.requestmetrics.com/agent/current/rm.js'
+      );
+      RM.install({
+        token: 'f5re5ga:e4xy3zq',
+      });
     </script>
-
-</body>
+    <nav>
+      <ul>
+        <li><a href="runaway.html">도망가는 버튼</a></li>
+        <li><a href="flip.html">카드 플립</a></li>
+        <li><a href="wave.html">파도 버튼</a></li>
+        <li><a href="neon.html">네온 글자</a></li>
+      </ul>
+    </nav>
+    <div class="container">
+      <h1>재미있는 CSS 애니메이션</h1>
+      <p>메뉴를 선택해서 다양한 인터랙션을 체험해보세요!</p>
+    </div>
+  </body>
 </html>
